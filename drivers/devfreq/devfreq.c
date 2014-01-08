@@ -1098,7 +1098,12 @@ static int __init devfreq_init(void)
 		return PTR_ERR(devfreq_class);
 	}
 
+<<<<<<< HEAD
 	devfreq_wq = alloc_workqueue("devfreq_wq",
+=======
+	devfreq_wq =
+	    alloc_workqueue("devfreq_wq",
+>>>>>>> d93a0f9... PM: devfreq: Use high priority workqueue
 			    WQ_HIGHPRI | WQ_UNBOUND | WQ_FREEZABLE |
 			    WQ_MEM_RECLAIM, 0);
 	if (!devfreq_wq) {
