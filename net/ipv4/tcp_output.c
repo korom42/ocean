@@ -906,8 +906,8 @@ out:
  * We are working here with either a clone of the original
  * SKB, or a fresh unique copy made by the retransmit engine.
  */
-static int __tcp_transmit_skb(struct sock *sk, struct sk_buff *skb,
-			      int clone_it, gfp_t gfp_mask, u32 rcv_nxt)
+static int tcp_transmit_skb(struct sock *sk, struct sk_buff *skb, int clone_it,
+			    gfp_t gfp_mask)
 {
 	const struct inet_connection_sock *icsk = inet_csk(sk);
 	struct inet_sock *inet;
@@ -967,7 +967,7 @@ static int __tcp_transmit_skb(struct sock *sk, struct sk_buff *skb,
 	th->source		= inet->inet_sport;
 	th->dest		= inet->inet_dport;
 	th->seq			= htonl(tcb->seq);
-	th->ack_seq		= htonl(rcv_nxt);
+	th->ack_seq		= htonl(tp->rcv_nxt);
 	*(((__be16 *)th) + 6)	= htons(((tcp_header_size >> 2) << 12) |
 					tcb->tcp_flags);
 
@@ -1039,13 +1039,6 @@ static int __tcp_transmit_skb(struct sock *sk, struct sk_buff *skb,
 	tcp_enter_cwr(sk);
 
 	return net_xmit_eval(err);
-}
-
-static int tcp_transmit_skb(struct sock *sk, struct sk_buff *skb, int clone_it,
-			    gfp_t gfp_mask)
-{
-	return __tcp_transmit_skb(sk, skb, clone_it, gfp_mask,
-				  tcp_sk(sk)->rcv_nxt);
 }
 
 /* This routine just queues the buffer for sending.
@@ -3364,7 +3357,7 @@ void tcp_send_delayed_ack(struct sock *sk)
 }
 
 /* This routine sends an ack and also updates the window. */
-void __tcp_send_ack(struct sock *sk, u32 rcv_nxt)
+void tcp_send_ack(struct sock *sk)
 {
 	struct sk_buff *buff;
 
@@ -3401,6 +3394,7 @@ void __tcp_send_ack(struct sock *sk, u32 rcv_nxt)
 
 	/* Send it off, this clears delayed acks for us. */
 	skb_mstamp_get(&buff->skb_mstamp);
+<<<<<<< HEAD
 	__tcp_transmit_skb(sk, buff, 0, sk_gfp_atomic(sk, GFP_ATOMIC), rcv_nxt);
 }
 EXPORT_SYMBOL_GPL(__tcp_send_ack);
@@ -3408,6 +3402,9 @@ EXPORT_SYMBOL_GPL(__tcp_send_ack);
 void tcp_send_ack(struct sock *sk)
 {
 	__tcp_send_ack(sk, tcp_sk(sk)->rcv_nxt);
+=======
+	tcp_transmit_skb(sk, buff, 0, sk_gfp_atomic(sk, GFP_ATOMIC));
+>>>>>>> parent of 01d6398... tcp: helpers to send special DCTCP ack
 }
 
 /* This routine sends a packet with an out of date sequence
