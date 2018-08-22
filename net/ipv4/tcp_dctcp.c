@@ -144,7 +144,12 @@ static void dctcp_ce_state_0_to_1(struct sock *sk)
 	/* State has changed from CE=0 to CE=1 and delayed
 	 * ACK has not sent yet.
 	 */
+<<<<<<< HEAD
 	if (!ca->ce_state && ca->delayed_ack_reserved) {
+=======
+	if (!ca->ce_state &&
+	    inet_csk(sk)->icsk_ack.pending & ICSK_ACK_TIMER) {
+>>>>>>> parent of 0177215... tcp: do not cancel delay-AcK on DCTCP special ACK
 		u32 tmp_rcv_nxt;
 
 		/* Save current rcv_nxt. */
@@ -158,7 +163,10 @@ static void dctcp_ce_state_0_to_1(struct sock *sk)
 
 		/* Recover current rcv_nxt. */
 		tp->rcv_nxt = tmp_rcv_nxt;
+<<<<<<< HEAD
 >>>>>>> parent of db0eb47... tcp: fix dctcp delayed ACK schedule
+=======
+>>>>>>> parent of 0177215... tcp: do not cancel delay-AcK on DCTCP special ACK
 	}
 
 	ca->prior_rcv_nxt = tp->rcv_nxt;
@@ -185,7 +193,12 @@ static void dctcp_ce_state_1_to_0(struct sock *sk)
 	/* State has changed from CE=1 to CE=0 and delayed
 	 * ACK has not sent yet.
 	 */
+<<<<<<< HEAD
 	if (ca->ce_state && ca->delayed_ack_reserved) {
+=======
+	if (ca->ce_state &&
+	    inet_csk(sk)->icsk_ack.pending & ICSK_ACK_TIMER) {
+>>>>>>> parent of 0177215... tcp: do not cancel delay-AcK on DCTCP special ACK
 		u32 tmp_rcv_nxt;
 
 		/* Save current rcv_nxt. */
@@ -199,7 +212,10 @@ static void dctcp_ce_state_1_to_0(struct sock *sk)
 
 		/* Recover current rcv_nxt. */
 		tp->rcv_nxt = tmp_rcv_nxt;
+<<<<<<< HEAD
 >>>>>>> parent of db0eb47... tcp: fix dctcp delayed ACK schedule
+=======
+>>>>>>> parent of 0177215... tcp: do not cancel delay-AcK on DCTCP special ACK
 	}
 
 	ca->prior_rcv_nxt = tp->rcv_nxt;
