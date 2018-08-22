@@ -132,6 +132,7 @@ static void dctcp_ce_state_0_to_1(struct sock *sk)
 	struct tcp_sock *tp = tcp_sk(sk);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (!ca->ce_state) {
 		/* State has changed from CE=0 to CE=1, force an immediate
 		 * ACK to reflect the new CE state. If an ACK was delayed,
@@ -168,6 +169,14 @@ static void dctcp_ce_state_0_to_1(struct sock *sk)
 =======
 >>>>>>> parent of 0177215... tcp: do not cancel delay-AcK on DCTCP special ACK
 	}
+=======
+	/* State has changed from CE=0 to CE=1 and delayed
+	 * ACK has not sent yet.
+	 */
+	if (!ca->ce_state &&
+	    inet_csk(sk)->icsk_ack.pending & ICSK_ACK_TIMER)
+		__tcp_send_ack(sk, ca->prior_rcv_nxt);
+>>>>>>> parent of 50a318d... tcp: do not delay ACK in DCTCP upon CE status change
 
 	ca->prior_rcv_nxt = tp->rcv_nxt;
 	ca->ce_state = 1;
@@ -180,6 +189,7 @@ static void dctcp_ce_state_1_to_0(struct sock *sk)
 	struct dctcp *ca = inet_csk_ca(sk);
 	struct tcp_sock *tp = tcp_sk(sk);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	if (ca->ce_state) {
 		/* State has changed from CE=1 to CE=0, force an immediate
@@ -217,6 +227,14 @@ static void dctcp_ce_state_1_to_0(struct sock *sk)
 =======
 >>>>>>> parent of 0177215... tcp: do not cancel delay-AcK on DCTCP special ACK
 	}
+=======
+	/* State has changed from CE=1 to CE=0 and delayed
+	 * ACK has not sent yet.
+	 */
+	if (ca->ce_state &&
+	    inet_csk(sk)->icsk_ack.pending & ICSK_ACK_TIMER)
+		__tcp_send_ack(sk, ca->prior_rcv_nxt);
+>>>>>>> parent of 50a318d... tcp: do not delay ACK in DCTCP upon CE status change
 
 	ca->prior_rcv_nxt = tp->rcv_nxt;
 	ca->ce_state = 0;
